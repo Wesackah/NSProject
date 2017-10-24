@@ -21,7 +21,7 @@ def vertrekTijd():
         vertreklijst.append(str)
     print(vertreklijst)
 
-hguhgyhuhuh
+
 def Storing():
     api_url = 'http://webservices.ns.nl/ns-api-storingen?station=ut'
     response = requests.get(api_url, auth=auth_details)
@@ -31,4 +31,4 @@ def Storing():
         traject = storing['Traject']
         print(traject)
 
-vertrekTijd()
+Storing()
