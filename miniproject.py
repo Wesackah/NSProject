@@ -19,16 +19,31 @@ def vertrekTijd():
         str += spoor['@wijziging'] + ' '
         str += spoor['#text']
         vertreklijst.append(str)
-    print(vertreklijst)
+    # print(vertreklijst)
 
 
 def Storing():
     api_url = 'http://webservices.ns.nl/ns-api-storingen?station=ut'
     response = requests.get(api_url, auth=auth_details)
     storingXML = xmltodict.parse(response.text)
-
+    storingOngeplandlst = []
+    storingGeplandlst = []
     for storing in storingXML['Storingen']['Gepland']['Storing']:
-        traject = storing['Traject']
-        print(traject)
+        str = ''
+        str += storing['Traject']
+        str += storing['Periode']
+        storingGeplandlst.append(str)
+
+    if storingXML['Storingen']['Ongepland'] != None:
+        for storing in storingXML['Storingen']['Ongepland']['Storing']:
+            str = ''
+            str += storing['Traject']
+            str += storing['Periode']
+            storingOngeplandlst.append(str)
+
+
+    print(storingGeplandlst)
+    print(storingOngeplandlst)
+
 
 Storing()
