@@ -1,12 +1,34 @@
 from tkinter import *
+import requests
+import xmltodict
+
+auth_details = ('wesackah@gmail.com', 'aw17-v2gaEXQp1zWCvHXPW-M7lmVFrj1wr05rbTgmyPN0PF7-HDsJg')
+#returnt een lijst met alle vertrektijden als strings
+def vertrekTijd():
+    api_url = 'http://webservices.ns.nl/ns-api-avt?station=ut'
+    response = requests.get(api_url, auth=auth_details)
+    vertrekXML = xmltodict.parse(response.text)
+    vertreklijst = []
+    for vertrek in vertrekXML['ActueleVertrekTijden']['VertrekkendeTrein']:
+        str = ''
+        str += vertrek['EindBestemming'] + ' '
+        vertrektijd = vertrek['VertrekTijd'] + ' ' # 2016-09-27T18:36:00+0200
+        str += vertrektijd[11:16] + ' ' # 18:36
+        str += vertrek['TreinSoort'] + ' '
+        spoor = vertrek['VertrekSpoor']
+        str += spoor['#text']
+        # if spoor['@wijziging'] == "True":
+        #     str += ' spoorweiziging'
+        vertreklijst.append(str)
+    return vertreklijst
 
 #opent een window met de reisinformatie van het huidige station
 def reisinformatie():
     infoframe = Frame(width=1280, height=720, bg="Yellow")
     scrollbar = Scrollbar(master=infoframe)
-    listbox = Listbox(infoframe, yscrollcommand=scrollbar.set, height= 25,width= 114,font=('Helvetica',14),bg='yellow')
-    for line in range(100):
-        listbox.insert(END, "This is line number " + str(line))
+    listbox = Listbox(infoframe, yscrollcommand=scrollbar.set, height= 25,width= 116,font=('Helvetica',14),bg='yellow')
+    for tijd in vertrekTijd():
+        listbox.insert(END, tijd)
     listbox.place(x=0,y=0)
     scrollbar.config(command=listbox.yview)
     scrollbar.place(x=1260, y=0)
