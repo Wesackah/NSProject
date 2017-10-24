@@ -46,7 +46,6 @@ def reisinformatie():
     back.place(x=1000, y=600)
     infoframe.place(x=0, y=0)
 
-
 #stel het TK window in met de goede afmetingen en de buttons en labels van het startscherm
 root = Tk()
 root.geometry("1280x720")
