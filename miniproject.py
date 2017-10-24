@@ -29,11 +29,12 @@ def Storing():
     storingXML = xmltodict.parse(response.text)
     storingOngeplandlst = []
     storingGeplandlst = []
-    for storing in storingXML['Storingen']['Gepland']['Storing']:
-        str = ''
-        str += storing['Traject']
-        str += storing['Periode']
-        storingGeplandlst.append(str)
+    if storingXML['Storingen']['Gepland'] != None:
+        for storing in storingXML['Storingen']['Gepland']['Storing']:
+            str = ''
+            str += storing['Traject']
+            str += storing['Periode']
+            storingGeplandlst.append(str)
 
     if storingXML['Storingen']['Ongepland'] != None:
         for storing in storingXML['Storingen']['Ongepland']['Storing']:
