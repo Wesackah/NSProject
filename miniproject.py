@@ -20,8 +20,9 @@ def vertrekTijd():
         str += spoor['@wijziging'] + ' '
         str += spoor['#text']
         vertreklijst.append(str)
-    print(vertreklijst)
-    # print(vertrekXML['ActueleVertrekTijden']['VertrekkendeTrein'])
+    return vertreklijst
+    # for i in vertrekXML['ActueleVertrekTijden']['VertrekkendeTrein']):
+    #     if i == ['Vertraging']
 
 def Storing():
     api_url = 'http://webservices.ns.nl/ns-api-storingen?station=ut'
@@ -48,4 +49,13 @@ def Storing():
     print(storingOngeplandlst)
 
 
-vertrekTijd()
+def stationDic(): #Haalt uit NS XML alle stationsnamen en zet deze in een dictionary waarbij de lange naam de key is en de code de value.
+    api_url = 'http://webservices.ns.nl/ns-api-stations-v2'
+    response = requests.get(api_url, auth=auth_details)
+    stationXML = xmltodict.parse(response.text)
+    stationDict = {}
+    for station in stationXML['Stations']['Station']:
+        stationDict[station['Namen']['Lang']] = station['Code']
+    print(stationDict)
+
+stationDic()
