@@ -12,7 +12,6 @@ def vertrekTijd():
     for vertrek in vertrekXML['ActueleVertrekTijden']['VertrekkendeTrein']:
         str = ''
         str += vertrek['EindBestemming'] + ' '
-        # str += vertrek['VertrekVertragingTekst'] + ' '
         vertrektijd = vertrek['VertrekTijd'] + ' ' # 2016-09-27T18:36:00+0200
         str += vertrektijd[11:16] + ' ' # 18:36
         str += vertrek['TreinSoort'] + ' '
@@ -21,8 +20,6 @@ def vertrekTijd():
         str += spoor['#text']
         vertreklijst.append(str)
     return vertreklijst
-    # for i in vertrekXML['ActueleVertrekTijden']['VertrekkendeTrein']):
-    #     if i == ['Vertraging']
 
 def Storing():
     api_url = 'http://webservices.ns.nl/ns-api-storingen?station=ut'
