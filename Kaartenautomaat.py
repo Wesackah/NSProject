@@ -27,9 +27,12 @@ def storingen(code):
     storingXML = xmltodict.parse(response.text)
     storingList = []
     if storingXML['Storingen']['Gepland'] != None:
-        storingList.append('Geplande storingen')
-        for storing in storingXML['Storingen']['Gepland']['Storing']:
-            storingList.append(storing['Traject'] + ' ' + storing['Periode'])
+        storingList.append('Werkzaamheden')
+        if type(storingXML['Storingen']['Gepland']['Storing']) == list:
+            for storing in storingXML['Storingen']['Gepland']['Storing']:
+                storingList.append(storing['Traject'] + ' ' + storing['Periode'])
+        else:
+            storingList.append(storingXML['Storingen']['Gepland']['Storing']['Traject'] + ' ' + storingXML['Storingen']['Gepland']['Storing']['Periode'])
 
     if storingXML['Storingen']['Ongepland'] != None:
         storingList.append('')
