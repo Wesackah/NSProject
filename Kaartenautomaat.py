@@ -25,9 +25,9 @@ def storingen(code):
     api_url = 'http://webservices.ns.nl/ns-api-storingen?station=' + code
     response = requests.get(api_url, auth=inlogGegevens)
     storingXML = xmltodict.parse(response.text)
-
+    storingList = []
     if storingXML['Storingen']['Gepland'] != None:
-        storingList = ['Geplande storingen']
+        storingList.append('Geplande storingen')
         for storing in storingXML['Storingen']['Gepland']['Storing']:
             storingList.append(storing['Traject'] + ' ' + storing['Periode'])
 
@@ -45,9 +45,14 @@ def storingen(code):
 
 #opent een window met de reisinformatie van het huidige station
 def reisInformatie(code):
-    infoFrame = Frame(width=1280, height=720, bg="Yellow")
-    scrollbar = Scrollbar(master=infoFrame) #scrollbar om door de lijst te kunnen scrollen
-    listBox = Listbox(infoFrame, yscrollcommand=scrollbar.set, height= 25,width= 128,font=('Consolas',14),bg='yellow')
+    infoFrame = Frame(width=1280,
+                      height=720,
+                      bg="Yellow")
+    listBox = Listbox(infoFrame,
+                      height= 25,
+                      width= 128,
+                      font=('Consolas',14),
+                      bg='yellow')
     # for loop die de juiste tijden ophaalt via vertrekTijd() en ze daarna in de ListBox zet met de juiste opmaak via makeString()
     for tijd in vertrekTijd(code):
         listBox.insert(END, makeString(tijd))
@@ -56,12 +61,15 @@ def reisInformatie(code):
     for storing in storingen(code):
         listBox.insert(END, storing)
     listBox.place(x=0,y=25)
-    scrollbar.config(command=listBox.yview)
-    scrollbar.place(x=1260, y=25)
-    infoLabel = Label(master= infoFrame, text=makeString('Bestemming;Tijd;Type;Spoor'),font=('Consolas',14,'bold'),bg='yellow',width=108)
+    infoLabel = Label(master= infoFrame,
+                      text=makeString('Bestemming;Tijd;Type;Spoor'),
+                      font=('Consolas',14,'bold'),
+                      bg='yellow',
+                      width=108)
     infoLabel.place(x=0,y=0)
     # back button om terug te gaan naar het hoofdmenu
-    back = Button(master=infoFrame,text='terug',
+    back = Button(master=infoFrame,
+                  text='terug',
                   bg="Blue",
                   fg="White",
                   activebackground="Blue",
@@ -88,21 +96,35 @@ def reisInfoAnder():
                 break
         if found == '':
             melding = Label(master=selectFrame,
-                            text='geen geldig station',
+                            text='geen geldig station, bedoelde je:',
                             bg="yellow",
                             fg="red",
-                            font=('Helvetica', 30),
-                            width=16,
+                            font=('Helvetica', 20),
+                            width=30,
                             height=1)
-            melding.place(x=300,y=360)
+            melding.place(x=50,y=110)
+            listBox = Listbox(master=selectFrame,
+                              height=10,
+                              width=30,
+                              selectborderwidth= 0,
+                              fg= 'red',
+                              font=('Helvetica', 20),
+                              bg='yellow')
+            for naam in stationDict:
+                if textInvoer.get() in naam:
+                    listBox.insert(END,naam)
+            listBox.place(x=500,y=110)
         else:
             reisInformatie(stationDict[found])
             selectFrame.destroy()
 
     #maakt het frame aan met de textinvoer en de buttons
-    selectFrame = Frame(width=1280, height=720, bg="Yellow")
-    textInvoer = Entry(master=selectFrame,font=('Helvetica', 34))
-    textInvoer.place(x=300,y=300)
+    selectFrame = Frame(width=1280,
+                        height=720,
+                        bg="Yellow")
+    textInvoer = Entry(master=selectFrame,
+                       font=('Helvetica', 34))
+    textInvoer.place(x=50,y=50)
     goButton = Button(master=selectFrame, text='>',
                   bg="Blue",
                   fg="White",
@@ -112,7 +134,7 @@ def reisInfoAnder():
                   width=7,
                   height=1,
                   command=checkStation)
-    goButton.place(x=800,y=300)
+    goButton.place(x=550,y=50)
     back = Button(master=selectFrame, text='terug',
                   bg="Blue",
                   fg="White",
@@ -133,7 +155,6 @@ def makeString(inputString):
             word += ' '
         outputString += word
     return outputString
-
 
 
 #inloggegevens om bij de NS api te kunnen
